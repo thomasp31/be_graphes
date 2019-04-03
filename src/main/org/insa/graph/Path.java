@@ -210,11 +210,14 @@ public class Path {
      * 
      * @return Total length of the path (in meters).
      * 
-     * @deprecated Need to be implemented.
      */
     public float getLength() {
         // TODO:
-        return 0;
+    	float somme=0;
+    	for (Arc a: this.arcs) {
+    		somme+=a.getLength();
+    	}
+        return somme;
     }
 
     /**
