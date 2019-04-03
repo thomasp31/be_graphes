@@ -202,6 +202,10 @@ public class Path {
      */
     public boolean isValid() {
         // TODO:
+    	boolean res=false;
+    	if (this.isEmpty() || this.size()==1 ) {
+    		res=true;
+    	}
         return false;
     }
 
