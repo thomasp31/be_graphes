@@ -1,6 +1,7 @@
 package org.insa.graph;
 
 import java.util.ArrayList;
+import java.util.*;
 import java.util.Collections;
 import java.util.List;
 
@@ -55,9 +56,47 @@ public class Path {
      */
     public static Path createShortestPathFromNodes(Graph graph, List<Node> nodes)
             throws IllegalArgumentException {
+    	Node node, aux;
+    	float min= Float.MAX_VALUE;
+    	Arc arc_min=null;
         List<Arc> arcs = new ArrayList<Arc>();
-        // TODO:
-        return new Path(graph, arcs);
+        List<Arc> arcs_final = new ArrayList<Arc>();
+
+        ListIterator<Node> it = nodes.listIterator();
+        
+        node=it.next();
+        
+        if (nodes.size() < 2) {
+        	
+        	return new Path(graph, node);
+        }
+        int indice=2;
+        aux=it.next();
+        it.previous();
+        
+        while(it.hasNext() || indice <= nodes.size()) {
+        	
+	        for (Arc a : graph.get(node.getId()).getSuccessors()) {
+	        	if (a.getDestination()==aux) {
+	        		arcs.add(a);
+	        	}
+	        }
+	        if(arcs.isEmpty()) {
+	        	throw new IllegalArgumentException();
+	        }
+	        for (Arc b : arcs) {
+	        	if (b.getLength()<min) {
+		        	arc_min=b;
+		        	min=b.getLength();
+	        	}
+	        }
+	        arcs_final.add(arc_min);
+	        arcs.clear();
+	        node=aux;
+	        aux=it.next();
+        indice++;
+        }
+        return new Path(graph, arcs_final);
     }
 
     /**
@@ -198,15 +237,33 @@ public class Path {
      * 
      * @return true if the path is valid, false otherwise.
      * 
-     * @deprecated Need to be implemented.
+     * 
      */
     public boolean isValid() {
-        // TODO:
-    	boolean res=false;
+    	Arc a;
+    	Arc aux=null;
+    	boolean res=true;
+    	
     	if (this.isEmpty() || this.size()==1 ) {
     		res=true;
-    	}
-        return false;
+    	}else {
+    		
+    		ListIterator<Arc> it = this.arcs.listIterator();
+    		a=it.next();
+    		res=(a.getOrigin()==this.getOrigin());
+    		
+    		while(res==true && it.hasNext()) {
+    			aux=a;
+    			a=it.next();
+    			
+    			if (aux.getDestination() != a.getOrigin()) {
+    				res=false;
+    			}
+    			
+    		}
+		}
+    	
+        return res;
     }
 
     /**
@@ -216,7 +273,6 @@ public class Path {
      * 
      */
     public float getLength() {
-        // TODO:
     	float somme=0;
     	for (Arc a: this.arcs) {
     		somme+=a.getLength();
@@ -232,11 +288,10 @@ public class Path {
      * @return Time (in seconds) required to travel this path at the given speed (in
      *         kilometers-per-hour).
      * 
-     * @deprecated Need to be implemented.
      */
     public double getTravelTime(double speed) {
-        // TODO:
-        return 0;
+    	float longueur = this.getLength();
+    	return longueur * 3.6/(speed); 
     }
 
     /**
@@ -248,8 +303,11 @@ public class Path {
      * @deprecated Need to be implemented.
      */
     public double getMinimumTravelTime() {
-        // TODO:
-        return 0;
+    	double time=0;
+    	for (Arc a: this.arcs) {
+    		time+=a.getTravelTime(a.getRoadInformation().getMaximumSpeed());
+    	}
+        return time;
     }
 
 }
