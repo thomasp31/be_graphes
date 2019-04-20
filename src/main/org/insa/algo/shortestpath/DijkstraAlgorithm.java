@@ -11,7 +11,116 @@ import org.insa.graph.Path;
 
 
 
+
 public class DijkstraAlgorithm extends ShortestPathAlgorithm {
+
+    public DijkstraAlgorithm(ShortestPathData data) {
+        super(data);
+    }
+
+    @Override
+	protected ShortestPathSolution doRun() {
+	    ShortestPathData data = getInputData();
+	    Graph graph = data.getGraph();
+	    
+	    final int nbNodes = graph.size();
+	    
+	   
+	    notifyOriginProcessed(data.getOrigin());
+	    Arc[] predecessorArcs = new Arc[nbNodes];
+	    
+	    ArrayList<Label> tablab=new ArrayList<Label>();
+	    
+	    Label x=new Label(data.getOrigin(),true,0,(Arc)null);
+	    
+	    BinaryHeap<Label> Tas_label= new BinaryHeap<Label>();
+	    tablab.add(0,x);
+	    Tas_label.insert(x); //insère le label du point d'origine
+	   
+	    
+	    
+	    while(!Tas_label.isEmpty()) {
+	    	
+	    	x = Tas_label.deleteMin();
+	    	x.setMark(true);
+	    	
+	    	if(!tablab.contains(x)){
+	    		tablab.add(x.getNode().getId(), x);
+	    	}
+	    	
+	    	for(Arc successeur : x.getNode().getSuccessors()) {
+	    		
+	    		//y n'appartienenet pas à tablab
+	    		
+	    		if(!tablab.get(successeur.getDestination().getId()).getNode().equals(successeur.getDestination())) { 
+	    			
+	            	tablab.add(successeur.getDestination().getId(),new Label(successeur.getDestination(),false,0,successeur));
+	            	
+	            	if(tablab.get(successeur.getDestination().getId()).getCost()>tablab.get(x.getNode().getId()).getCost() + successeur.getLength()) {
+	            		//Cost(y=cost(x)+W(x,y)
+	            		tablab.get(successeur.getDestination().getId()).setCost(tablab.get(x.getNode().getId()).getCost() + successeur.getLength());
+            		}
+	            	try {
+        				Tas_label.remove(tablab.get(successeur.getDestination().getId()));
+        				Tas_label.insert(new Label(successeur.getDestination(),false,0,successeur));
+        				predecessorArcs[successeur.getDestination().getId()] = successeur;
+        			}catch(Exception ElementNotFoundException){
+        				Tas_label.insert(new Label(successeur.getDestination(),false,0,successeur));
+        				predecessorArcs[successeur.getDestination().getId()] = successeur;
+        			}
+	        
+	        	}else if(!tablab.get(successeur.getDestination().getId()).isMarked()){ // test si y marked ou non
+	        			
+	        		if(tablab.get(successeur.getDestination().getId()).getCost()>tablab.get(x.getNode().getId()).getCost() + successeur.getLength()) {
+	            		//Cost(y=cost(x)+W(x,y)
+	            		tablab.get(successeur.getDestination().getId()).setCost(tablab.get(x.getNode().getId()).getCost() + successeur.getLength());
+            		}
+	            	try {
+        				Tas_label.remove(tablab.get(successeur.getDestination().getId()));
+        				Tas_label.insert(new Label(successeur.getDestination(),false,0,successeur));
+        				predecessorArcs[successeur.getDestination().getId()] = successeur;
+        			}catch(Exception ElementNotFoundException){
+        				Tas_label.insert(new Label(successeur.getDestination(),false,0,successeur));
+        				predecessorArcs[successeur.getDestination().getId()] = successeur;
+        			}
+	        	}
+	    	}
+    	}
+	    
+	    ShortestPathSolution solution = null;
+	    
+	 // Destination has no predecessor, the solution is infeasible...
+	    if (predecessorArcs[data.getDestination().getId()] == null) {
+	        solution = new ShortestPathSolution(data, Status.INFEASIBLE);
+	    }
+	    else {
+	
+	        // The destination has been found, notify the observers.
+	        notifyDestinationReached(data.getDestination());
+	
+	        // Create the path from the array of predecessors...
+	        ArrayList<Arc> arcs = new ArrayList<>();
+	        Arc arc = predecessorArcs[data.getDestination().getId()];
+	        while (arc != null) {
+	            arcs.add(arc);
+	            arc = predecessorArcs[arc.getOrigin().getId()];
+	        }
+	
+	        // Reverse the path...
+	        Collections.reverse(arcs);
+	
+	        // Create the final solution.
+	        solution = new ShortestPathSolution(data, Status.OPTIMAL, new Path(graph, arcs));
+	    }
+	    
+	    	return solution;
+	}
+}
+
+
+
+
+/*public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
     public DijkstraAlgorithm(ShortestPathData data) {
         super(data);
@@ -39,12 +148,13 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	    //Label L;
 	    //Arc Daron_init=null;
 	    boolean marked=false;
-	    Label x=new Label(data.getOrigin(),false,0,(Arc)null);
+	    Label x=new Label(data.getOrigin(),true,0,(Arc)null);
 	    
 	    BinaryHeap<Label> Tas_label= new BinaryHeap<Label>();
-	    
+	    tablab.add(0,x);
+	    Tas_label.insert(x);
 	    //lab.add(new Label(data.getOrigin(),false,0,(Arc)null));
-	    Tas_label.insert(tablab.get(tablab.size()-1)); //insère le point d'origine
+	    //Tas_label.insert(tablab.get(tablab.size()-1)); //insère le point d'origine
 	   
 	    
 	    
@@ -53,6 +163,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	    	//on peut add ds un arraylist à un index particulier. on choisit l'index du noeuds. noeuds.getID
 	    	x = Tas_label.findMin();
 	    	tablab.add(new Label(x.getNode(),true,0,(Arc)null));
+	    	//tablab.add(x.getNode().getId(), new Label(x.getNode(),true,0,(Arc)null));
 	    	for(Arc successeur : x.getNode().getSuccessors()) {
 	    		
 	    		//y n'appartienenet pas à tablab
@@ -88,6 +199,8 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	
 	            		}
 	            	}
+	    		}else {
+	    			marked=true;
 	    		}
 	    	}
     	}
@@ -139,10 +252,4 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 			}
 		return index;
     }
-    
-	/*private void L(Node noeud_courant, boolean b, double positiveInfinity, Arc daron_init) {
-		// TODO Auto-generated method stub
-		
-	}*/
-
-}
+}*/
