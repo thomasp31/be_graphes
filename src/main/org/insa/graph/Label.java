@@ -1,5 +1,5 @@
 package org.insa.graph;
-import java.util.ArrayList;
+//import java.util.ArrayList;
 
 public class Label implements Comparable<Label> {
 	private Node courant;	
@@ -44,5 +44,8 @@ public class Label implements Comparable<Label> {
 	
 	public Node getNode() {
 		return this.courant;
+	}
+	public Arc getFather() {
+		return this.pere;
 	}
 }

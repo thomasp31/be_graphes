@@ -6,7 +6,7 @@ import org.insa.algo.utils.BinaryHeap;
 import org.insa.graph.Arc;
 import org.insa.graph.Graph;
 import org.insa.graph.Label;
-import org.insa.graph.Node;
+//import org.insa.graph.Node;
 import org.insa.graph.Path;
 
 
@@ -20,77 +20,88 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
     @Override
 	protected ShortestPathSolution doRun() {
+    	
 	    ShortestPathData data = getInputData();
 	    Graph graph = data.getGraph();
-	    
-	    final int nbNodes = graph.size();
-	    
-	   
 	    notifyOriginProcessed(data.getOrigin());
-	    Arc[] predecessorArcs = new Arc[nbNodes];
+	    final int nbNodes = graph.size();
+
+	    //Chemin: liste noeuds pour faire chemin plus rapide
+	    //tablab: liste noeuds rencontrer pendant l'algorithme
+        ArrayList<Label> Chemin = new ArrayList<Label>();
+	    Label tablab[]=new Label[nbNodes];
 	    
-	    ArrayList<Label> tablab=new ArrayList<Label>();
-	    
-	    Label x=new Label(data.getOrigin(),true,0,(Arc)null);
-	    
+	    //Tas_label: tas necessaire à l'alorithme de Dijkstra
 	    BinaryHeap<Label> Tas_label= new BinaryHeap<Label>();
-	    tablab.add(0,x);
-	    Tas_label.insert(x); //insÃ¨re le label du point d'origine
+
+	    Label x=new Label(data.getOrigin(),false,0,(Arc)null);
+
+	    tablab[x.getNode().getId()]=x;
+	    Tas_label.insert(x); //insere le label du point d'origine
 	   
-	    
+	    //zone debug
+    	System.out.println("nb successeur: "+ tablab[x.getNode().getId()].getNode().getNumberOfSuccessors());
+    	int index=0; //compteur pour 5 premiers points
+    	//for(Arc successeur : x.getNode().getSuccessors()) {
+        	//System.out.println("id des points successeurs: "+successeur.getDestination().getId()+" cout: "+successeur.getLength());
+    	//}
 	    
 	    while(!Tas_label.isEmpty()) {
 	    	
 	    	x = Tas_label.deleteMin();
-	    	x.setMark(true);
 	    	
-	    	if(!tablab.contains(x)){
-	    		tablab.add(x.getNode().getId(), x);
+	    	if(tablab[x.getNode().getId()]==null){
+	    		tablab[x.getNode().getId()]= x;
 	    	}
-	    	
-	    	for(Arc successeur : x.getNode().getSuccessors()) {
+	    	tablab[x.getNode().getId()].setMark(true);
+
+	    	//c'est x qu'on doit mettre ds le chemin le plus court et pas le y qui est juste une mise à jour du tableau
+	    	//on crée une list de label qui forme le chemin le plus court ensuite on fera la liste des arcs "papa" 
+	    	Chemin.add(tablab[x.getNode().getId()]);
+
+	    	for(Arc successeur : tablab[x.getNode().getId()].getNode().getSuccessors()) {
 	    		
-	    		//y n'appartienenet pas Ã  tablab
+	    		//y n'appartienenet pas a  tablab on l'ajoute
 	    		
-	    		if(!tablab.get(successeur.getDestination().getId()).getNode().equals(successeur.getDestination())) { 
+	    		if(tablab[successeur.getDestination().getId()]==null) {     			
+	            	tablab[successeur.getDestination().getId()]=new Label(successeur.getDestination(),false,Float.MAX_VALUE,successeur);	            	
+	    		}
+	    		
+	    		if(!tablab[successeur.getDestination().getId()].isMarked()){ // test si y marked on saute
 	    			
-	            	tablab.add(successeur.getDestination().getId(),new Label(successeur.getDestination(),false,0,successeur));
-	            	
-	            	if(tablab.get(successeur.getDestination().getId()).getCost()>tablab.get(x.getNode().getId()).getCost() + successeur.getLength()) {
-	            		//Cost(y=cost(x)+W(x,y)
-	            		tablab.get(successeur.getDestination().getId()).setCost(tablab.get(x.getNode().getId()).getCost() + successeur.getLength());
+	        		if(tablab[successeur.getDestination().getId()].getCost()>tablab[x.getNode().getId()].getCost() + successeur.getLength()) {
+	            		//Cost(y)=cost(x)+W(x,y)
+	            		try {
+		            		//pour faire la mise a jour:
+		            		//on supprime et on remet avec le getCost à jour
+	        				Tas_label.remove(tablab[successeur.getDestination().getId()]);
+		            		tablab[successeur.getDestination().getId()].setCost(tablab[x.getNode().getId()].getCost() + successeur.getLength());
+	        				Tas_label.insert(new Label(successeur.getDestination(),false,tablab[successeur.getDestination().getId()].getCost(),successeur));
+	        				
+	    	            	//zone debug
+	    	    	    	if(index<4) {
+	    	    		    	System.out.println("update de Tas_label: "+successeur.getDestination().getId());
+	    	    	    	}
+	    	    	    	
+	        			}catch(Exception ElementNotFoundException){
+	        				
+	    	            	//zone debug
+	    	    	    	if(index<4) {
+	    	    		    	System.out.println("insertion ds Tas_label: "+successeur.getDestination().getId());
+	    	    	    	}
+	    	    	    	
+	        				Tas_label.insert(new Label(successeur.getDestination(),false,tablab[successeur.getDestination().getId()].getCost(),successeur));
+	        			}
             		}
-	            	try {
-        				Tas_label.remove(tablab.get(successeur.getDestination().getId()));
-        				Tas_label.insert(new Label(successeur.getDestination(),false,0,successeur));
-        				predecessorArcs[successeur.getDestination().getId()] = successeur;
-        			}catch(Exception ElementNotFoundException){
-        				Tas_label.insert(new Label(successeur.getDestination(),false,0,successeur));
-        				predecessorArcs[successeur.getDestination().getId()] = successeur;
-        			}
-	        
-	        	}else if(!tablab.get(successeur.getDestination().getId()).isMarked()){ // test si y marked ou non
-	        			
-	        		if(tablab.get(successeur.getDestination().getId()).getCost()>tablab.get(x.getNode().getId()).getCost() + successeur.getLength()) {
-	            		//Cost(y=cost(x)+W(x,y)
-	            		tablab.get(successeur.getDestination().getId()).setCost(tablab.get(x.getNode().getId()).getCost() + successeur.getLength());
-            		}
-	            	try {
-        				Tas_label.remove(tablab.get(successeur.getDestination().getId()));
-        				Tas_label.insert(new Label(successeur.getDestination(),false,0,successeur));
-        				predecessorArcs[successeur.getDestination().getId()] = successeur;
-        			}catch(Exception ElementNotFoundException){
-        				Tas_label.insert(new Label(successeur.getDestination(),false,0,successeur));
-        				predecessorArcs[successeur.getDestination().getId()] = successeur;
-        			}
 	        	}
 	    	}
-    	}
+    	index++;
+	    }
 	    
 	    ShortestPathSolution solution = null;
 	    
 	 // Destination has no predecessor, the solution is infeasible...
-	    if (predecessorArcs[data.getDestination().getId()] == null) {
+	    if (Chemin.isEmpty()) {
 	        solution = new ShortestPathSolution(data, Status.INFEASIBLE);
 	    }
 	    else {
@@ -98,17 +109,18 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	        // The destination has been found, notify the observers.
 	        notifyDestinationReached(data.getDestination());
 	
-	        // Create the path from the array of predecessors...
+	        // Create the path from the arrayList of Node...
 	        ArrayList<Arc> arcs = new ArrayList<>();
-	        Arc arc = predecessorArcs[data.getDestination().getId()];
-	        while (arc != null) {
-	            arcs.add(arc);
-	            arc = predecessorArcs[arc.getOrigin().getId()];
+	        
+	        //on commence au dernier indice et on finit à l'indice 1
+	        for(int i=Chemin.size()-1;i>0;i--) {
+	        	Label courant=Chemin.get(i);
+		    	System.out.println("Chemin: "+courant.getNode().getId()+" i: "+i);
+
+	            arcs.add(courant.getFather());
 	        }
-	
-	        // Reverse the path...
-	        Collections.reverse(arcs);
-	
+        Collections.reverse(arcs);
+
 	        // Create the final solution.
 	        solution = new ShortestPathSolution(data, Status.OPTIMAL, new Path(graph, arcs));
 	    }
@@ -253,3 +265,103 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 		return index;
     }
 }*/
+
+
+
+/*
+ * package org.insa.algo.shortestpath;
+ * 
+ * import java.util.*; import org.insa.algo.AbstractSolution.Status; import
+ * org.insa.algo.utils.BinaryHeap; import org.insa.graph.Arc; import
+ * org.insa.graph.Graph; import org.insa.graph.Label; import
+ * org.insa.graph.Node; import org.insa.graph.Path;
+ * 
+ * 
+ * 
+ * public class ijkstraAlgorithm extends ShortestPathAlgorithm {
+ * 
+ * public ijkstraAlgorithm(ShortestPathData data) { super(data); }
+ * 
+ * @Override protected ShortestPathSolution doRun() { ShortestPathData data =
+ * getInputData(); Graph graph = data.getGraph();
+ * 
+ * final int nbNodes = graph.size();
+ * 
+ * 
+ * notifyOriginProcessed(data.getOrigin()); Arc[] predecessorArcs = new
+ * Arc[nbNodes];
+ * 
+ * ArrayList<Label> tablab=new ArrayList<Label>();
+ * 
+ * boolean marked=false; Label x=new Label(data.getOrigin(),true,0,(Arc)null);
+ * 
+ * BinaryHeap<Label> Tas_label= new BinaryHeap<Label>(); tablab.add(0,x);
+ * Tas_label.insert(x); //insÃ¨re le label du point d'origine
+ * 
+ * 
+ * 
+ * while (!Tas_label.isEmpty()) { //utiliser un index pour chaque noeud par
+ * exmple tab[50]=noeud avec index =50 //on peut add ds un arraylist Ã  un index
+ * particulier. on choisit l'index du noeuds. noeuds.getID x =
+ * Tas_label.deleteMin(); x.setMark(true);
+ * 
+ * if(!tablab.contains(x)){ tablab.add(x.getNode().getId(), x); }
+ * 
+ * for(Arc successeur : x.getNode().getSuccessors()) {
+ * 
+ * //y n'appartienenet pas Ã  tablab
+ * 
+ * if(!tablab.get(successeur.getDestination().getId()).getNode().equals(
+ * successeur.getDestination())) {
+ * 
+ * tablab.add(successeur.getDestination().getId(),new
+ * Label(successeur.getDestination(),false,0,successeur));
+ * 
+ * if(tablab.get(successeur.getDestination().getId()).getCost()>tablab.get(x.
+ * getNode().getId()).getCost() + successeur.getLength()) {
+ * //Cost(y=cost(x)+W(x,y)
+ * tablab.get(successeur.getDestination().getId()).setCost(tablab.get(x.getNode(
+ * ).getId()).getCost() + successeur.getLength()); } try {
+ * Tas_label.remove(tablab.get(successeur.getDestination().getId()));
+ * Tas_label.insert(new Label(successeur.getDestination(),true,0,successeur));
+ * predecessorArcs[successeur.getDestination().getId()] = successeur;
+ * }catch(Exception ElementNotFoundException){ Tas_label.insert(new
+ * Label(successeur.getDestination(),true,0,successeur));
+ * predecessorArcs[successeur.getDestination().getId()] = successeur; }
+ * 
+ * }else if(!tablab.get(successeur.getDestination().getId()).isMarked()){ //
+ * test si y marked ou non
+ * 
+ * if(tablab.get(successeur.getDestination().getId()).getCost()>tablab.get(x.
+ * getNode().getId()).getCost() + successeur.getLength()) {
+ * //Cost(y=cost(x)+W(x,y)
+ * tablab.get(successeur.getDestination().getId()).setCost(tablab.get(x.getNode(
+ * ).getId()).getCost() + successeur.getLength()); } try {
+ * Tas_label.remove(tablab.get(successeur.getDestination().getId()));
+ * Tas_label.insert(new Label(successeur.getDestination(),true,0,successeur));
+ * predecessorArcs[successeur.getDestination().getId()] = successeur;
+ * }catch(Exception ElementNotFoundException){ Tas_label.insert(new
+ * Label(successeur.getDestination(),true,0,successeur));
+ * predecessorArcs[successeur.getDestination().getId()] = successeur; } } } }
+ * 
+ * ShortestPathSolution solution = null;
+ * 
+ * // Destination has no predecessor, the solution is infeasible... if
+ * (predecessorArcs[data.getDestination().getId()] == null) { solution = new
+ * ShortestPathSolution(data, Status.INFEASIBLE); } else {
+ * 
+ * // The destination has been found, notify the observers.
+ * notifyDestinationReached(data.getDestination());
+ * 
+ * // Create the path from the array of predecessors... ArrayList<Arc> arcs =
+ * new ArrayList<>(); Arc arc = predecessorArcs[data.getDestination().getId()];
+ * while (arc != null) { arcs.add(arc); arc =
+ * predecessorArcs[arc.getOrigin().getId()]; }
+ * 
+ * // Reverse the path... Collections.reverse(arcs);
+ * 
+ * // Create the final solution. solution = new ShortestPathSolution(data,
+ * Status.OPTIMAL, new Path(graph, arcs)); }
+ * 
+ * return solution; } }
+ */
