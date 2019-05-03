@@ -45,7 +45,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	    while(!Tas_label.isEmpty() && x.getNode()!=data.getDestination()) {
 	    	
 	    	x = Tas_label.deleteMin();
-	    	System.out.println("min: "+x.getNode().getId());
+	    	System.out.println("min: "+x.getNode().getId()+" cout: " +x.getCost());
 	    	Chemin[x.getNode().getId()]=x;
 	    	if(tablab[x.getNode().getId()]==null){
 	    		tablab[x.getNode().getId()]= x;
@@ -58,7 +58,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	    		
 	    		if(tablab[successeur.getDestination().getId()]==null) {     			
 	            	tablab[successeur.getDestination().getId()]=new Label(successeur.getDestination(),false,Float.MAX_VALUE,successeur);
-	            	Tas_label.insert(new Label(successeur.getDestination(),false,Float.MAX_VALUE,successeur));
+	            	//Tas_label.insert(new Label(successeur.getDestination(),false,Float.MAX_VALUE,successeur));
 	    		}
 	    		
 	    		if(!tablab[successeur.getDestination().getId()].isMarked()){ // test si y marked on saute
@@ -68,8 +68,8 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	            		try {
 		            		//pour faire la mise a jour:
 		            		//on supprime et on remet avec le getCost à jour
-	        				Tas_label.remove(tablab[successeur.getDestination().getId()]);
 		            		tablab[successeur.getDestination().getId()].setCost(tablab[x.getNode().getId()].getCost() + successeur.getLength());
+	        				Tas_label.remove(tablab[successeur.getDestination().getId()]);
 	        				Tas_label.insert(new Label(successeur.getDestination(),false,tablab[successeur.getDestination().getId()].getCost(),successeur));
 	    	    	    	
 	        			}catch(Exception ElementNotFoundException){	    	    	
