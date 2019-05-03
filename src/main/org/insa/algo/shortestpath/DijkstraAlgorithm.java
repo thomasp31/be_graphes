@@ -96,7 +96,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	        // Create the path from the arrayList of Node...
 	        ArrayList<Arc> arcs = new ArrayList<>();
 	        
-	        Label courant=new Label(data.getDestination(),true,tablab[data.getDestination().getId()].getCost(),tablab[data.getDestination().getId()].getFather());
+	        Label courant=tablab[data.getDestination().getId()];//new Label(data.getDestination(),true,tablab[data.getDestination().getId()].getCost(),tablab[data.getDestination().getId()].getFather());
 	        while(courant.getNode().getId()!=data.getOrigin().getId()) {
 	            arcs.add(courant.getFather());
 
