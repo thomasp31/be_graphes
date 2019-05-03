@@ -26,38 +26,31 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	    notifyOriginProcessed(data.getOrigin());
 	    final int nbNodes = graph.size();
 
-	    //Chemin: liste noeuds pour faire chemin plus rapide
+	    //Chemin: liste noeuds mini qui sortent du tas (il faut ensuite choisir le bon noeud pour remonter le chemin)
+	    //un noeud sortant du tas n'est pas forcément impliqué ds le chemin le plus court
 	    //tablab: liste noeuds rencontrer pendant l'algorithme
-        ArrayList<Label> Chemin = new ArrayList<Label>();
+        Label Chemin[] = new Label[nbNodes];
 	    Label tablab[]=new Label[nbNodes];
 	    
 	    //Tas_label: tas necessaire à l'alorithme de Dijkstra
 	    BinaryHeap<Label> Tas_label= new BinaryHeap<Label>();
 
 	    Label x=new Label(data.getOrigin(),false,0,(Arc)null);
-
 	    tablab[x.getNode().getId()]=x;
 	    Tas_label.insert(x); //insere le label du point d'origine
 	   
 	    //zone debug
-    	System.out.println("nb successeur: "+ tablab[x.getNode().getId()].getNode().getNumberOfSuccessors());
     	int index=0; //compteur pour 5 premiers points
-    	//for(Arc successeur : x.getNode().getSuccessors()) {
-        	//System.out.println("id des points successeurs: "+successeur.getDestination().getId()+" cout: "+successeur.getLength());
-    	//}
 	    
-	    while(!Tas_label.isEmpty()) {
+	    while(!Tas_label.isEmpty() && x.getNode()!=data.getDestination()) {
 	    	
 	    	x = Tas_label.deleteMin();
-	    	
+	    	System.out.println("min: "+x.getNode().getId());
+	    	Chemin[x.getNode().getId()]=x;
 	    	if(tablab[x.getNode().getId()]==null){
 	    		tablab[x.getNode().getId()]= x;
 	    	}
 	    	tablab[x.getNode().getId()].setMark(true);
-
-	    	//c'est x qu'on doit mettre ds le chemin le plus court et pas le y qui est juste une mise à jour du tableau
-	    	//on crée une list de label qui forme le chemin le plus court ensuite on fera la liste des arcs "papa" 
-	    	Chemin.add(tablab[x.getNode().getId()]);
 
 	    	for(Arc successeur : tablab[x.getNode().getId()].getNode().getSuccessors()) {
 	    		
@@ -80,14 +73,14 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	        				
 	    	            	//zone debug
 	    	    	    	if(index<4) {
-	    	    		    	System.out.println("update de Tas_label: "+successeur.getDestination().getId());
+	    	    		    	//System.out.println("update de Tas_label: "+successeur.getDestination().getId());
 	    	    	    	}
 	    	    	    	
 	        			}catch(Exception ElementNotFoundException){
 	        				
 	    	            	//zone debug
 	    	    	    	if(index<4) {
-	    	    		    	System.out.println("insertion ds Tas_label: "+successeur.getDestination().getId());
+	    	    		    	//System.out.println("insertion ds Tas_label: "+successeur.getDestination().getId());
 	    	    	    	}
 	    	    	    	
 	        				Tas_label.insert(new Label(successeur.getDestination(),false,tablab[successeur.getDestination().getId()].getCost(),successeur));
@@ -99,9 +92,10 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	    }
 	    
 	    ShortestPathSolution solution = null;
+	   
 	    
 	 // Destination has no predecessor, the solution is infeasible...
-	    if (Chemin.isEmpty()) {
+	    if (Chemin.length==0) {
 	        solution = new ShortestPathSolution(data, Status.INFEASIBLE);
 	    }
 	    else {
@@ -112,12 +106,11 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	        // Create the path from the arrayList of Node...
 	        ArrayList<Arc> arcs = new ArrayList<>();
 	        
-	        //on commence au dernier indice et on finit à l'indice 1
-	        for(int i=Chemin.size()-1;i>0;i--) {
-	        	Label courant=Chemin.get(i);
-		    	System.out.println("Chemin: "+courant.getNode().getId()+" i: "+i);
-
+	        Label courant=new Label(data.getDestination(),true,tablab[data.getDestination().getId()].getCost(),tablab[data.getDestination().getId()].getFather());
+	        while(courant.getNode().getId()!=data.getOrigin().getId()) {
 	            arcs.add(courant.getFather());
+
+	        	courant=tablab[courant.getFather().getOrigin().getId()];
 	        }
         Collections.reverse(arcs);
 
