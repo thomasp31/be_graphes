@@ -57,7 +57,8 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	    		//y n'appartienenet pas a  tablab on l'ajoute
 	    		
 	    		if(tablab[successeur.getDestination().getId()]==null) {     			
-	            	tablab[successeur.getDestination().getId()]=new Label(successeur.getDestination(),false,Float.MAX_VALUE,successeur);	            	
+	            	tablab[successeur.getDestination().getId()]=new Label(successeur.getDestination(),false,Float.MAX_VALUE,successeur);
+	            	Tas_label.insert(new Label(successeur.getDestination(),false,Float.MAX_VALUE,successeur));
 	    		}
 	    		
 	    		if(!tablab[successeur.getDestination().getId()].isMarked()){ // test si y marked on saute
@@ -70,19 +71,8 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	        				Tas_label.remove(tablab[successeur.getDestination().getId()]);
 		            		tablab[successeur.getDestination().getId()].setCost(tablab[x.getNode().getId()].getCost() + successeur.getLength());
 	        				Tas_label.insert(new Label(successeur.getDestination(),false,tablab[successeur.getDestination().getId()].getCost(),successeur));
-	        				
-	    	            	//zone debug
-	    	    	    	if(index<4) {
-	    	    		    	//System.out.println("update de Tas_label: "+successeur.getDestination().getId());
-	    	    	    	}
 	    	    	    	
-	        			}catch(Exception ElementNotFoundException){
-	        				
-	    	            	//zone debug
-	    	    	    	if(index<4) {
-	    	    		    	//System.out.println("insertion ds Tas_label: "+successeur.getDestination().getId());
-	    	    	    	}
-	    	    	    	
+	        			}catch(Exception ElementNotFoundException){	    	    	
 	        				Tas_label.insert(new Label(successeur.getDestination(),false,tablab[successeur.getDestination().getId()].getCost(),successeur));
 	        			}
             		}
