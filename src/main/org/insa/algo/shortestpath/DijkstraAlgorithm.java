@@ -47,6 +47,10 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	    	x = Tas_label.deleteMin();
 	    	System.out.println("min: "+x.getNode().getId()+" cout: " +x.getCost());
 	    	Chemin[x.getNode().getId()]=x;
+	    	
+        	//informe les observateurs qu'un noeud a été marqué
+	    	notifyNodeMarked(Chemin[x.getNode().getId()].getNode());
+	    	
 	    	if(tablab[x.getNode().getId()]==null){
 	    		tablab[x.getNode().getId()]= x;
 	    	}
@@ -58,7 +62,10 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	    		
 	    		if(tablab[successeur.getDestination().getId()]==null) {     			
 	            	tablab[successeur.getDestination().getId()]=new Label(successeur.getDestination(),false,Float.MAX_VALUE,successeur);
-	            	//Tas_label.insert(new Label(successeur.getDestination(),false,Float.MAX_VALUE,successeur));
+	            	
+	            	//informe les observateurs qu'un noeud a été visité pour la première fois
+	    	    	notifyNodeReached(tablab[successeur.getDestination().getId()].getNode());
+
 	    		}
 	    		
 	    		if(!tablab[successeur.getDestination().getId()].isMarked()){ // test si y marked on saute
