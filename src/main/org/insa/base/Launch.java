@@ -47,9 +47,11 @@ public class Launch {
     public static void main(String[] args) throws Exception {
 
         // Visit these directory to see the list of available files on Commetud.
-        String mapName = "/home/thomasp/Documents/insa/be_graphes/europe/france/insa.mapgr";
+        //String mapName = "/home/thomasp/Documents/insa/be_graphes/europe/france/insa.mapgr";
+    	String mapName = "C:/Users/Katillär/Documents/INSA/3ir/be_graphes/insa/europe/france/insa.mapgr";
         // faire un telechargement du path sur commetud
-        String pathName = "/home/thomasp/Documents/insa/be_graphes/europe/france/path_fr31insa_rangueil_r2.path";
+        //String pathName = "/home/thomasp/Documents/insa/be_graphes/europe/france/path_fr31insa_rangueil_r2.path";
+        String pathName = "C:/Users/Katillär/Documents/INSA/3ir/be_graphes/insa/europe/france/path_fr31insa_rangueil_r2.path";
 
         // Create a graph reader.
         GraphReader reader = new BinaryGraphReader(new DataInputStream(new BufferedInputStream(new FileInputStream(mapName))));
