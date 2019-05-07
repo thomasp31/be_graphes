@@ -170,6 +170,33 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
         }
     }
 
+    public boolean IsValid() {
+    	boolean result=true;
+    	
+        if(!this.isEmpty()) {
+
+        	BinaryHeap<E> copy = new BinaryHeap<E>(this);
+        	E min=copy.deleteMin();
+
+        	if(!copy.isEmpty()) {
+            	E aux=copy.deleteMin();
+
+            	while(!copy.isEmpty()&& result) {
+
+                	if(min.compareTo(aux)==1) {
+                		result= false;
+                	}
+                	min=aux;
+                	if(!copy.isEmpty()) {
+                    	aux=copy.deleteMin();
+                	}
+            	}
+        	}
+
+        }
+        return result;    	
+    }
+    
     @Override
     public E findMin() throws EmptyPriorityQueueException {
         if (isEmpty())

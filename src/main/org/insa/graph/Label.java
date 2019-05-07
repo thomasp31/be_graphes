@@ -1,24 +1,24 @@
 package org.insa.graph;
-//import java.util.ArrayList;
 
 public class Label implements Comparable<Label> {
 	private Node courant;	
 	private boolean marque;
-	private float cout;
+	private double cout;
 	private Arc pere;
+	private boolean insert;
 	
-	
-	public Label(Node cour, boolean marq, float cout, Arc papa) {
+	public Label(Node cour, boolean marq, double cout, Arc papa) {
 		this.courant=cour;
 		this.marque=marq;
 		this.cout=cout;
 		this.pere=papa;
+		this.insert=false;
 	}
 	
 	public int compareTo(Label other) {
-		if(this.cout==other.cout) {
+		if(this.getTotalCost()==other.getTotalCost()) {
 			return 0;
-		}else if(this.cout>other.cout) {
+		}else if(this.getTotalCost()>other.getTotalCost()) {
 			return 1;
 		}else{
 			return -1;
@@ -29,13 +29,25 @@ public class Label implements Comparable<Label> {
 		this.marque=B;
 	}
 	
-	public float getCost() {
+	public double getCost() {
 		return this.cout;
 	}
 	
 	
-	public void setCost(float new_cost) {
+	public void setCost(double new_cost) {
 		this.cout = new_cost;
+	}
+	
+	public void setFather(Arc new_father) {
+		this.pere = new_father;
+	}
+	
+	public void setInsert() {
+		this.insert = true;
+	}
+	
+	public boolean getInsert() {
+		return this.insert;
 	}
 	
 	public boolean isMarked() {
@@ -48,4 +60,9 @@ public class Label implements Comparable<Label> {
 	public Arc getFather() {
 		return this.pere;
 	}
+	
+	public double getTotalCost() {
+		return this.cout;
+	}
+	
 }
