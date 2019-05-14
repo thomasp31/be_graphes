@@ -14,8 +14,16 @@ import org.insa.graph.Path;
 
 public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
+    int i=1;	
+    private double cout;
+    
     public DijkstraAlgorithm(ShortestPathData data) {
         super(data);
+    }
+    
+    
+    public double getCout() {
+    	return this.cout;
     }
 
     @Override
@@ -27,12 +35,12 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	    final int nbNodes = graph.size();
 
 	    //Chemin: liste noeuds mini qui sortent du tas (il faut ensuite choisir le bon noeud pour remonter le chemin)
-	    //un noeud sortant du tas n'est pas forcément impliqué ds le chemin le plus court
+	    //un noeud sortant du tas n'est pas forcï¿½ment impliquï¿½ ds le chemin le plus court
 	    //tablab: liste noeuds rencontre pendant l'algorithme
         //Label Chemin[] = new Label[nbNodes];
 	    Label tablab[]=new Label[nbNodes];
 	    
-	    //Tas_label: tas necessaire à l'alorithme de Dijkstra
+	    //Tas_label: tas necessaire ï¿½ l'alorithme de Dijkstra
 	    BinaryHeap<Label> Tas_label= new BinaryHeap<Label>();
 
 	    Label x=new Label(data.getOrigin(),false,0.0,(Arc)null);
@@ -54,19 +62,19 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	    	//System.out.println("min: "+x.getNode().getId()+" cout: " +x.getCost()+" taille Tas: "+Tas_label.size());
 	    	//Chemin[x.getNode().getId()]=x;
 	    	
-        	//informe les observateurs qu'un noeud a été marqué
+        	//informe les observateurs qu'un noeud a ï¿½tï¿½ marquï¿½
 	    	notifyNodeMarked(tablab[x.getNode().getId()].getNode());
 	    	
 	    	tablab[x.getNode().getId()].setMark(true);
 
 	    	for(Arc successeur : tablab[x.getNode().getId()].getNode().getSuccessors()) {
 	    		
-	    		//y n'appartienenet pas a  tablab on l'ajoute
+	    		//y n'appartienenet pas aï¿½ tablab on l'ajoute
 	    		
 	    		if(tablab[successeur.getDestination().getId()]==null) {     			
 	            	tablab[successeur.getDestination().getId()]=new Label(successeur.getDestination(),false,Double.MAX_VALUE,successeur);
 	            	
-	            	//informe les observateurs qu'un noeud a été visité pour la première fois
+	            	//informe les observateurs qu'un noeud a ï¿½tï¿½ visitï¿½ pour la premiï¿½re fois
 	    	    	notifyNodeReached(tablab[successeur.getDestination().getId()].getNode());
 	    	    	
 	    	    	tablab[successeur.getDestination().getId()].setInsert();
@@ -81,7 +89,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	            		//Cost(y)=cost(x)+W(x,y)
 
 		            	//pour faire la mise a jour:
-		            	//on supprime et on remet avec le getCost à jour
+		            	//on supprime et on remet avec le getCost ï¿½ jour
     					tablab[successeur.getDestination().getId()].setCost(tablab[x.getNode().getId()].getCost() + data.getCost(successeur));
     					tablab[successeur.getDestination().getId()].setFather(successeur);
 
@@ -112,22 +120,27 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	        ArrayList<Arc> arcs = new ArrayList<>();
 	        
 	        Label courant=tablab[data.getDestination().getId()];
-	        int i=1;
-	        //pb map insa point 230 à 1000???
+
+	        //pb map insa point 230 ï¿½ 1000???
 	        while(courant.getNode().getId()!=data.getOrigin().getId()) {
 	            arcs.add(courant.getFather());
 	            i++;
+	            //cout+=courant.getCost();
 	        	courant=tablab[courant.getFather().getOrigin().getId()];
 	        }
         Collections.reverse(arcs);
-    	System.out.println("taille chemin: "+i+" nb iterations: "+iter);
+        //Calcul du cout du chemin
+        for(Arc A: arcs) {
+        	cout+=A.getLength();
+        }
+    	/*System.out.println("taille chemin: "+i+" nb iterations: "+iter);
     	if(valid) {
         	System.out.println("youpi");
 
     	}else {
         	System.out.println("triste");
 
-    	}
+    	}*/
 
 	        // Create the final solution.
 	        solution = new ShortestPathSolution(data, Status.OPTIMAL, new Path(graph, arcs));

@@ -1,10 +1,13 @@
 package org.insa.algo.shortestpath;
 
+import org.insa.algo.*;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -22,7 +25,7 @@ import org.insa.graph.RoadInformation;
 import org.insa.graph.RoadInformation.RoadType;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
+import java.util.*;
 
 public class DikjstraAlgorithmTest {
 	
@@ -65,9 +68,40 @@ public class DikjstraAlgorithmTest {
         f2e = Node.linkNodes(nodes[5], nodes[4], 3, speed10, null);
 
         graph = new Graph("ID", "", Arrays.asList(nodes), null);
-       // A_Path = new ShortestPathData(graph,nodes[0],nodes[1],(ArcInspector)null);
-
+        List<ArcInspector> L = ArcInspectorFactory.getAllFilters();
+        
+        A_Path = new ShortestPathData(graph,nodes[0],nodes[1],L.get(0));
+        B_Path = new ShortestPathData(graph,nodes[3],nodes[4],L.get(0));
+        C_Path = new ShortestPathData(graph,nodes[0],nodes[5],L.get(0));
+        D_Path = new ShortestPathData(graph,nodes[5],nodes[1],L.get(0));
+        }
+    
+    @Test
+    public void testConstructor() {
+        assertEquals(graph, A_Path.getGraph());
+        assertEquals(graph, B_Path.getGraph());
     }
+    
+    @Test
+    public void testDijkstra() {
+    	DijkstraAlgorithm D1 = new DijkstraAlgorithm(A_Path);
+    	ShortestPathSolution PS1 = D1.run();
+    	System.out.println("sol: "+PS1);
+    	
+    	DijkstraAlgorithm D2 = new DijkstraAlgorithm(B_Path);
+    	ShortestPathSolution PS2 = D2.run();
+    	System.out.println("sol: "+PS2);
+    	
+    	DijkstraAlgorithm D3 = new DijkstraAlgorithm(C_Path);
+    	ShortestPathSolution PS3 = D3.run();
+    	System.out.println("sol: "+PS3);
+    	
+    	DijkstraAlgorithm D4 = new DijkstraAlgorithm(D_Path);
+    	ShortestPathSolution PS4 = D4.run();
+    	System.out.println("sol: "+PS4);
+    }
+    
+    
     
     @Test
     public void testFromA() {

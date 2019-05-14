@@ -12,6 +12,12 @@ import org.insa.graph.Path;
 
 public class BellmanFordAlgorithm extends ShortestPathAlgorithm {
 
+	private double cout_B=0;
+	
+	 public double getCout() {
+	    	return this.cout_B;
+	    }
+	
     public BellmanFordAlgorithm(ShortestPathData data) {
         super(data);
     }
@@ -89,7 +95,12 @@ public class BellmanFordAlgorithm extends ShortestPathAlgorithm {
 
             // Reverse the path...
             Collections.reverse(arcs);
-
+            
+          //Calcul du cout du chemin
+            for(Arc A: arcs) {
+            	cout_B+=A.getLength();
+            }
+            
             // Create the final solution.
             solution = new ShortestPathSolution(data, Status.OPTIMAL, new Path(graph, arcs));
         }
