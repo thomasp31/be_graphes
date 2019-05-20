@@ -6,6 +6,7 @@ import org.insa.algo.utils.BinaryHeap;
 import org.insa.graph.Arc;
 import org.insa.graph.Graph;
 import org.insa.graph.Label;
+import org.insa.graph.Node;
 //import org.insa.graph.Node;
 import org.insa.graph.Path;
 
@@ -21,6 +22,10 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         super(data);
     }
     
+    protected Label newLabel(Node cour, boolean marq, double cout, Arc papa,ShortestPathData data) {
+    	Label L=new Label(cour, marq, cout, papa);
+    	return L;
+    }
     
     public double getCout() {
     	return this.cout;
@@ -43,7 +48,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	    //Tas_label: tas necessaire � l'alorithme de Dijkstra
 	    BinaryHeap<Label> Tas_label= new BinaryHeap<Label>();
 
-	    Label x=new Label(data.getOrigin(),false,0.0,(Arc)null);
+	    Label x=newLabel(data.getOrigin(),false,0.0,(Arc)null, data);
 	    tablab[x.getNode().getId()]=x;
 	    tablab[x.getNode().getId()].setInsert();
 	    Tas_label.insert(x); //insere le label du point d'origine
@@ -53,26 +58,26 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	    while(!Tas_label.isEmpty() && x.getNode()!=data.getDestination()) {
 	    	iter++;
 	    	
-		    	if(!Tas_label.IsValid()) {
+		    	/*if(!Tas_label.IsValid()) {
 		    		valid=false;
-		    	}	    		
+		    	}*/		
 	    	
 
 	    	x = Tas_label.deleteMin();
 	    	//System.out.println("min: "+x.getNode().getId()+" cout: " +x.getCost()+" taille Tas: "+Tas_label.size());
 	    	//Chemin[x.getNode().getId()]=x;
 	    	
-        	//informe les observateurs qu'un noeud a �t� marqu�
+        	//informe les obseLabelrvateurs qu'un noeud a �t� marqu�
 	    	notifyNodeMarked(tablab[x.getNode().getId()].getNode());
 	    	
 	    	tablab[x.getNode().getId()].setMark(true);
 
-	    	for(Arc successeur : tablab[x.getNode().getId()].getNode().getSuccessors()) {
+	    	for(Arc successeur : tablab[x.getNode().getId()].getNode().getSuccessors()){
 	    		
 	    		//y n'appartienenet pas a� tablab on l'ajoute
 	    		
 	    		if(tablab[successeur.getDestination().getId()]==null) {     			
-	            	tablab[successeur.getDestination().getId()]=new Label(successeur.getDestination(),false,Double.MAX_VALUE,successeur);
+	            	tablab[successeur.getDestination().getId()]=newLabel(successeur.getDestination(),false,Double.MAX_VALUE,successeur, data);
 	            	
 	            	//informe les observateurs qu'un noeud a �t� visit� pour la premi�re fois
 	    	    	notifyNodeReached(tablab[successeur.getDestination().getId()].getNode());
@@ -87,17 +92,18 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	    			
 	        		if(tablab[successeur.getDestination().getId()].getCost()>tablab[x.getNode().getId()].getCost() + data.getCost(successeur)) {
 	            		//Cost(y)=cost(x)+W(x,y)
-
+	        			
+	        			if(tablab[successeur.getDestination().getId()].getInsert()) {
+	        				Tas_label.remove(tablab[successeur.getDestination().getId()]);
+            			}
+	        			
 		            	//pour faire la mise a jour:
 		            	//on supprime et on remet avec le getCost � jour
     					tablab[successeur.getDestination().getId()].setCost(tablab[x.getNode().getId()].getCost() + data.getCost(successeur));
     					tablab[successeur.getDestination().getId()].setFather(successeur);
 
-	            			if(tablab[successeur.getDestination().getId()].getInsert()) {
-		        				Tas_label.remove(tablab[successeur.getDestination().getId()]);
-	            			}
 
-	    	    	    	Tas_label.insert(tablab[successeur.getDestination().getId()]);
+	    	    		Tas_label.insert(tablab[successeur.getDestination().getId()]);
 
             		}
 	        	}
@@ -130,9 +136,9 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	        }
         Collections.reverse(arcs);
         //Calcul du cout du chemin
-        for(Arc A: arcs) {
+        /*for(Arc A: arcs) {
         	cout+=A.getLength();
-        }
+        }*/
     	/*System.out.println("taille chemin: "+i+" nb iterations: "+iter);
     	if(valid) {
         	System.out.println("youpi");

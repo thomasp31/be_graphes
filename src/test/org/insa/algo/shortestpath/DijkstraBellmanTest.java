@@ -64,7 +64,7 @@ public class DijkstraBellmanTest{
     	//privilégier les assert
     	
     	
-    	//**********************************************ON SE FAIT CHIER POUR RIEN*****************************************************//
+    	//******************************************************************************************//
     	
     	/*System.out.println("cout di: "+ D.getCout());
     	System.out.println("cout bi: "+ B.getCout());*/
