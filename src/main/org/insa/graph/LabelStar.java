@@ -22,6 +22,5 @@ public class LabelStar extends Label {
 		}else if(data.getMode()==Mode.TIME) {
 			this.coutEstime=Point.distance(this.getNode().getPoint(), data.getDestination().getPoint())/(Math.max(data.getGraph().getGraphInformation().getMaximumSpeed(), data.getMaximumSpeed())/3.6);
 		}
-		//this.coutEstime=0;
 	}
 }
