@@ -25,12 +25,12 @@ public class DijkstraBellmanTest{
 	}*/
 	
 	@Test
-	public void DijkstraTestOracle() throws IOException {
-		//String mapName = "C:/Users/KatillÔøΩr/Documents/INSA/3ir/be_graphes/insa/europe/france/insa.mapgr";
+	public void DijkstraTestOracleShortest() throws IOException {
+		String mapName = "C:/Users/Katill‰r/Documents/INSA/3ir/be_graphes/insa/europe/france/insa.mapgr";
 	    // faire un telechargement du path sur commetud
-	    String pathName = "/home/thomasp/Documents/insa/be_graphes/europe/france/path_fr31insa_rangueil_r2.path";
-	    String mapName = "/home/thomasp/Documents/insa/be_graphes/europe/france/insa.mapgr";
-	    //String pathName = "C:/Users/KatillÔøΩr/Documents/INSA/3ir/be_graphes/insa/europe/france/path_fr31insa_rangueil_r2.path";
+	    //String pathName = "/home/thomasp/Documents/insa/be_graphes/europe/france/path_fr31insa_rangueil_r2.path";
+	    //String mapName = "/home/thomasp/Documents/insa/be_graphes/europe/france/insa.mapgr";
+	    String pathName = "C:/Users/Katill‰r/Documents/INSA/3ir/be_graphes/insa/europe/france/path_fr31insa_rangueil_r2.path";
 
 	    // Create a graph reader.
 	    GraphReader reader = new BinaryGraphReader(new DataInputStream(new BufferedInputStream(new FileInputStream(mapName))));
@@ -77,8 +77,166 @@ public class DijkstraBellmanTest{
     	assertEquals(SPD.getPath().getLength(), SPB.getPath().getLength(),0.001);
     	
 	}
-
 	
+	@Test
+	public void DijkstraTestOracleFastest() throws IOException {
+		String mapName = "C:/Users/Katill‰r/Documents/INSA/3ir/be_graphes/insa/europe/france/insa.mapgr";
+	    // faire un telechargement du path sur commetud
+	    //String pathName = "/home/thomasp/Documents/insa/be_graphes/europe/france/path_fr31insa_rangueil_r2.path";
+	    //String mapName = "/home/thomasp/Documents/insa/be_graphes/europe/france/insa.mapgr";
+	    String pathName = "C:/Users/Katill‰r/Documents/INSA/3ir/be_graphes/insa/europe/france/path_fr31insa_rangueil_r2.path";
+
+	    // Create a graph reader.
+	    GraphReader reader = new BinaryGraphReader(new DataInputStream(new BufferedInputStream(new FileInputStream(mapName))));
+
+	    // TODO: Read the graph.
+	    Graph graph = reader.read();
+
+
+	    // TODO: Create a PathReader.
+	    PathReader pathReader = new BinaryPathReader(new DataInputStream(new BufferedInputStream(new FileInputStream(pathName))));
+
+	    // TODO: Read the path.
+	    Path path = pathReader.readPath(graph);
+
+        int idOrigin=1;
+        int idDest=121;
+        
+        List<ArcInspector> L = ArcInspectorFactory.getAllFilters();
+
+		
+		ShortestPathData SP=new ShortestPathData(graph,graph.get(idOrigin),graph.get(idDest),L.get(2));
+		DijkstraAlgorithm D=new DijkstraAlgorithm(SP);
+    	ShortestPathSolution SPD = D.run();
+    	BellmanFordAlgorithm B= new BellmanFordAlgorithm(SP);
+    	ShortestPathSolution SPB= B.run();
+    	System.out.println("sol: "+SPD);
+    	System.out.println("sol: "+SPB);
+    	System.out.println(" path longueur "+ SPD.getPath().getLength());
+    	//renvoie exactement la meme valeur donc ok
+    	//Avis de la prof: areter les print c'est pas beau et peut engendrer des erreurs quand on aura beaucoup d'erreurs
+    	//privil√©gier les assert
+    	
+    	
+    	//******************************************************************************************//
+    	
+    	/*System.out.println("cout di: "+ D.getCout());
+    	System.out.println("cout bi: "+ B.getCout());*/
+
+    	//Pour un ShortestPathSolution SPS, faire SPS.getPath().getLength() directement
+    	
+    	//assertTrue(PSB.equals(PSD));
+    	//assertEquals(D.getCout(), B.getCout(),0.001);//ne pas oublier la pr√©cision 
+    	
+    	assertEquals(SPD.getPath().getLength(), SPB.getPath().getLength(),0.001);
+    	
+	}
+
+	/*
+	 * @Test public void DijkstraTestOracleCarreDenseShorstest() throws IOException
+	 * { String mapName =
+	 * "C:/Users/Katill‰r/Documents/INSA/3ir/be_graphes/insa/europe/france/extras/carre-dense.mapgr";
+	 * // faire un telechargement du path sur commetud //String pathName =
+	 * "/home/thomasp/Documents/insa/be_graphes/europe/france/path_fr31insa_rangueil_r2.path";
+	 * //String mapName =
+	 * "/home/thomasp/Documents/insa/be_graphes/europe/france/insa.mapgr"; //String
+	 * pathName =
+	 * "C:/Users/Katill‰r/Documents/INSA/3ir/be_graphes/insa/europe/france/path_fr31insa_rangueil_r2.path";
+	 * 
+	 * // Create a graph reader. GraphReader reader = new BinaryGraphReader(new
+	 * DataInputStream(new BufferedInputStream(new FileInputStream(mapName))));
+	 * 
+	 * // TODO: Read the graph. Graph graph = reader.read();
+	 * 
+	 * 
+	 * // TODO: Create a PathReader. //PathReader pathReader = new
+	 * BinaryPathReader(new DataInputStream(new BufferedInputStream(new
+	 * FileInputStream(pathName))));
+	 * 
+	 * // TODO: Read the path. //Path path = pathReader.readPath(graph);
+	 * 
+	 * int idOrigin=1; int idDest=121;
+	 * 
+	 * List<ArcInspector> L = ArcInspectorFactory.getAllFilters();
+	 * 
+	 * 
+	 * ShortestPathData SP=new
+	 * ShortestPathData(graph,graph.get(idOrigin),graph.get(idDest),L.get(0));
+	 * DijkstraAlgorithm D=new DijkstraAlgorithm(SP); ShortestPathSolution SPD =
+	 * D.run(); BellmanFordAlgorithm B= new BellmanFordAlgorithm(SP);
+	 * ShortestPathSolution SPB= B.run(); System.out.println("sol: "+SPD);
+	 * System.out.println("sol: "+SPB); System.out.println(" path longueur "+
+	 * SPD.getPath().getLength()); //renvoie exactement la meme valeur donc ok
+	 * //Avis de la prof: areter les print c'est pas beau et peut engendrer des
+	 * erreurs quand on aura beaucoup d'erreurs //privil√©gier les assert
+	 * 
+	 * 
+	 * //
+	 ******************************************************************************************/
+
+	//System.out.println("cout di: "+D.getCout());System.out.println("cout bi: "+B.getCout());
+
+	// Pour un ShortestPathSolution SPS, faire SPS.getPath().getLength() directement
+
+	// assertTrue(PSB.equals(PSD));
+	// assertEquals(D.getCout(), B.getCout(),0.001);//ne pas oublier la pr√©cision
+
+	//assertEquals(SPD.getPath().getLength(), SPB.getPath().getLength(),0.001);
+    	
+	//}*/	
+	@Test
+	public void DijkstraTestOracleCarreDenseFastest() throws IOException {
+		String mapName = "C:/Users/Katill‰r/Documents/INSA/3ir/be_graphes/insa/europe/france/extras/carre-dense.mapgr";
+	    // faire un telechargement du path sur commetud
+	    //String pathName = "/home/thomasp/Documents/insa/be_graphes/europe/france/path_fr31insa_rangueil_r2.path";
+	    //String mapName = "/home/thomasp/Documents/insa/be_graphes/europe/france/insa.mapgr";
+	    //String pathName = "C:/Users/Katill‰r/Documents/INSA/3ir/be_graphes/insa/europe/france/path_fr31insa_rangueil_r2.path";
+
+	    // Create a graph reader.
+	    GraphReader reader = new BinaryGraphReader(new DataInputStream(new BufferedInputStream(new FileInputStream(mapName))));
+
+	    // TODO: Read the graph.
+	    Graph graph = reader.read();
+
+
+	    // TODO: Create a PathReader.
+	    //PathReader pathReader = new BinaryPathReader(new DataInputStream(new BufferedInputStream(new FileInputStream(pathName))));
+
+	    // TODO: Read the path.
+	    //Path path = pathReader.readPath(graph);
+
+        int idOrigin=1;
+        int idDest=121;
+        
+        List<ArcInspector> L = ArcInspectorFactory.getAllFilters();
+
+		
+		ShortestPathData SP=new ShortestPathData(graph,graph.get(idOrigin),graph.get(idDest),L.get(2));
+		DijkstraAlgorithm D=new DijkstraAlgorithm(SP);
+    	ShortestPathSolution SPD = D.run();
+    	BellmanFordAlgorithm B= new BellmanFordAlgorithm(SP);
+    	ShortestPathSolution SPB= B.run();
+    	System.out.println("sol: "+SPD);
+    	System.out.println("sol: "+SPB);
+    	System.out.println(" path longueur "+ SPD.getPath().getLength());
+    	//renvoie exactement la meme valeur donc ok
+    	//Avis de la prof: areter les print c'est pas beau et peut engendrer des erreurs quand on aura beaucoup d'erreurs
+    	//privil√©gier les assert
+    	
+    	
+    	//******************************************************************************************//
+    	
+    	/*System.out.println("cout di: "+ D.getCout());
+    	System.out.println("cout bi: "+ B.getCout());*/
+
+    	//Pour un ShortestPathSolution SPS, faire SPS.getPath().getLength() directement
+    	
+    	//assertTrue(PSB.equals(PSD));
+    	//assertEquals(D.getCout(), B.getCout(),0.001);//ne pas oublier la pr√©cision 
+    	
+    	assertEquals(SPD.getPath().getLength(), SPB.getPath().getLength(),0.001);
+    	
+	}
 	
 
 

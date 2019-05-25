@@ -22,11 +22,11 @@ public class AStarTest {
 
 	@Test
 	public void AStarTestPerformance() throws IOException {
-		//String mapName = "C:/Users/Katillï¿½r/Documents/INSA/3ir/be_graphes/insa/europe/france/insa.mapgr";
+		String mapName = "C:/Users/Katillär/Documents/INSA/3ir/be_graphes/insa/europe/france/insa.mapgr";
 	    // faire un telechargement du path sur commetud
-	    String pathName = "/home/thomasp/Documents/insa/be_graphes/europe/france/midi-pyrenees.mapfg";
-	    String mapName = "/home/thomasp/Documents/insa/be_graphes/europe/france/midi-pyrenees.mapgr";
-	    //String pathName = "C:/Users/Katillï¿½r/Documents/INSA/3ir/be_graphes/insa/europe/france/path_fr31insa_rangueil_r2.path";
+	    //String pathName = "/home/thomasp/Documents/insa/be_graphes/europe/france/midi-pyrenees.mapfg";
+	    //String mapName = "/home/thomasp/Documents/insa/be_graphes/europe/france/midi-pyrenees.mapgr";
+	    String pathName = "C:/Users/Katillär/Documents/INSA/3ir/be_graphes/insa/europe/france/path_fr31insa_rangueil_r2.path";
 
 	    // Create a graph reader.
 	    GraphReader reader = new BinaryGraphReader(new DataInputStream(new BufferedInputStream(new FileInputStream(mapName))));
