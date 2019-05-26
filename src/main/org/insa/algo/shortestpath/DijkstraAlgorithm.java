@@ -17,6 +17,27 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
     int i=1;	
     private double cout;
+    private boolean validity=true;
+    private int nbIteration=0;
+    
+    
+    // verifie la validite du tas dans le Dijsktra
+    public boolean IsValid() {
+    	if (this.validity)
+    		return true;
+    	else
+    		return false;
+    }
+    
+    //retourne le nombre d'iterration de l'algorithme
+    public int nbIter() {
+    	return this.nbIteration;
+    }
+    
+    //permet d'incrémentation l'iterration
+    public void IncrementIter() {
+    	this.nbIteration++;
+    }
     
     public DijkstraAlgorithm(ShortestPathData data) {
         super(data);
@@ -40,12 +61,12 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	    final int nbNodes = graph.size();
 
 	    //Chemin: liste noeuds mini qui sortent du tas (il faut ensuite choisir le bon noeud pour remonter le chemin)
-	    //un noeud sortant du tas n'est pas forc�ment impliqu� ds le chemin le plus court
+	    //un noeud sortant du tas n'est pas forcément impliqué ds le chemin le plus court
 	    //tablab: liste noeuds rencontre pendant l'algorithme
-        //Label Chemin[] = new Label[nbNodes];
+     
 	    Label tablab[]=new Label[nbNodes];
 	    
-	    //Tas_label: tas necessaire � l'alorithme de Dijkstra
+	    //Tas_label: tas nécessaire à l'alorithme de Dijkstra
 	    BinaryHeap<Label> Tas_label= new BinaryHeap<Label>();
 
 	    Label x=newLabel(data.getOrigin(),false,0.0,(Arc)null, data);
@@ -53,30 +74,30 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	    tablab[x.getNode().getId()].setInsert();
 	    Tas_label.insert(x); //insere le label du point d'origine
 	    
-	    int iter=0;
-	    boolean valid=true;
 	    while(!Tas_label.isEmpty() && x.getNode()!=data.getDestination()) {
-	    	iter++;
 	    	
-		    	/*if(!Tas_label.IsValid()) {
-		    		valid=false;
-		    	}*/		
+	    	//Test de la validité du Tas mis en commentaire car ralentit l'algorithme
+		    /*if(!Tas_label.IsValid()) {
+		    	this.validity=false;
+		   	}*/	
 	    	
+	    	this.IncrementIter();
 
 	    	x = Tas_label.deleteMin();
 	    	//System.out.println("min: "+x.getNode().getId()+" cout: " +x.getCost()+" taille Tas: "+Tas_label.size());
 	    	//Chemin[x.getNode().getId()]=x;
 	    	
-        	//informe les obseLabelrvateurs qu'un noeud a �t� marqu�
+        	//informe les observateurs qu'un noeud a ete marque
 	    	notifyNodeMarked(tablab[x.getNode().getId()].getNode());
 	    	
 	    	tablab[x.getNode().getId()].setMark(true);
 
 	    	for(Arc successeur : tablab[x.getNode().getId()].getNode().getSuccessors()){
 	    		
-	    		//y n'appartienenet pas a� tablab on l'ajoute
+	    		//y n'appartienenet pas a tablab on l'ajoute
 	    		
-	    		if(tablab[successeur.getDestination().getId()]==null) {     			
+	    		if(tablab[successeur.getDestination().getId()]==null) { 
+	    			
 	            	tablab[successeur.getDestination().getId()]=newLabel(successeur.getDestination(),false,Double.MAX_VALUE,successeur, data);
 	            	
 	            	//informe les observateurs qu'un noeud a �t� visit� pour la premi�re fois
@@ -84,11 +105,10 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	    	    	
 	    	    	tablab[successeur.getDestination().getId()].setInsert();
 	    	    	Tas_label.insert(tablab[successeur.getDestination().getId()]);
-
 	    		}
 
-	    		
-	    		if(!tablab[successeur.getDestination().getId()].isMarked()){ // test si y marked on saute
+	    		// test si y marked on saute le if
+	    		if(!tablab[successeur.getDestination().getId()].isMarked()){ 
 	    			
 	        		if(tablab[successeur.getDestination().getId()].getCost()>tablab[x.getNode().getId()].getCost() + data.getCost(successeur)) {
 	            		//Cost(y)=cost(x)+W(x,y)
@@ -98,7 +118,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
             			}
 	        			
 		            	//pour faire la mise a jour:
-		            	//on supprime et on remet avec le getCost � jour
+		            	//on supprime et on remet avec le getCost a jour
     					tablab[successeur.getDestination().getId()].setCost(tablab[x.getNode().getId()].getCost() + data.getCost(successeur));
     					tablab[successeur.getDestination().getId()].setFather(successeur);
 
@@ -113,7 +133,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	    ShortestPathSolution solution = null;
 	   
 	    
-	 // Destination has no predecessor, the solution is infeasible...
+	    //Destination has no predecessor, the solution is infeasible...
 	    if (tablab.length==0 || tablab[data.getDestination().getId()]==null) {
 	        solution = new ShortestPathSolution(data, Status.INFEASIBLE);
 	    }
@@ -127,7 +147,6 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	        
 	        Label courant=tablab[data.getDestination().getId()];
 
-	        //pb map insa point 230 � 1000???
 	        while(courant.getNode().getId()!=data.getOrigin().getId()) {
 	            arcs.add(courant.getFather());
 	            i++;
@@ -135,21 +154,9 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	        	courant=tablab[courant.getFather().getOrigin().getId()];
 	        }
         Collections.reverse(arcs);
-        //Calcul du cout du chemin
-        /*for(Arc A: arcs) {
-        	cout+=A.getLength();
-        }*/
-    	/*System.out.println("taille chemin: "+i+" nb iterations: "+iter);
-    	if(valid) {
-        	System.out.println("youpi");
-
-    	}else {
-        	System.out.println("triste");
-
-    	}*/
-
-	        // Create the final solution.
-	        solution = new ShortestPathSolution(data, Status.OPTIMAL, new Path(graph, arcs));
+    	    	
+	    // Create the final solution.
+        solution = new ShortestPathSolution(data, Status.OPTIMAL, new Path(graph, arcs));
 	    }
 	    
 	    	return solution;
