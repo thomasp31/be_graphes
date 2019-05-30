@@ -32,24 +32,24 @@ public class AStarTest {
 		//String pathName = "C:/Users/Katillï¿½r/Documents/INSA/3ir/be_graphes/insa/europe/france/path_fr31insa_rangueil_r2.path";
 		
 		//***************Path Ordinateur Morvan map BZH*********************/
-		//String mapName = "C:/Users/Katillär/Documents/INSA/3ir/be_graphes/insa/europe/france/bretagne.mapgr";
-		//String pathName = "C:/Users/Katillär/Documents/INSA/3ir/be_graphes/insa/europe/france/bretagne.path";
+		//String mapName = "C:/Users/Katillï¿½r/Documents/INSA/3ir/be_graphes/insa/europe/france/bretagne.mapgr";
+		//String pathName = "C:/Users/Katillï¿½r/Documents/INSA/3ir/be_graphes/insa/europe/france/bretagne.path";
 		
-		//***************Path Ordinateur Morvan map Midi-pyrénées*********************/
-		//String mapName = "C:/Users/Katillär/Documents/INSA/3ir/be_graphes/insa/europe/france/midi-pyrenees.mapgr";
-		//String pathName = "C:/Users/Katillär/Documents/INSA/3ir/be_graphes/insa/europe/france/midi-pyrenees.path";
+		//***************Path Ordinateur Morvan map Midi-pyrï¿½nï¿½es*********************/
+		//String mapName = "C:/Users/Katillï¿½r/Documents/INSA/3ir/be_graphes/insa/europe/france/midi-pyrenees.mapgr";
+		//String pathName = "C:/Users/Katillï¿½r/Documents/INSA/3ir/be_graphes/insa/europe/france/midi-pyrenees.path";
 		
 		//***************Path Ordinateur Morvan map Belgique*********************/
-		String mapName = "C:/Users/Katillär/Documents/INSA/3ir/be_graphes/insa/europe/france/belgium.mapgr";
-		String pathName = "C:/Users/Katillär/Documents/INSA/3ir/be_graphes/insa/europe/france/belgium.path";
+		//String mapName = "C:/Users/Katillï¿½r/Documents/INSA/3ir/be_graphes/insa/europe/france/belgium.mapgr";
+		//String pathName = "C:/Users/Katillï¿½r/Documents/INSA/3ir/be_graphes/insa/europe/france/belgium.path";
 		
 		//***************Path Ordinateur Thomas map INSA*********************/
 	    //String pathName = "/home/thomasp/Documents/insa/be_graphes/europe/france/path_fr31insa_rangueil_r2.path";
 	    //String mapName = "/home/thomasp/Documents/insa/be_graphes/europe/france/insa.mapgr";
 		
 		//***************Path Ordinateur Thomas map midi-pyrennees*********************/
-	    //String pathName = "/home/thomasp/Documents/insa/be_graphes/europe/france/midi-pyrenees.mapfg";
-	    //String mapName = "/home/thomasp/Documents/insa/be_graphes/europe/france/midi-pyrenees.mapgr";
+	    String pathName = "/home/thomasp/Documents/insa/be_graphes/europe/france/midi-pyrenees.mapfg";
+	    String mapName = "/home/thomasp/Documents/insa/be_graphes/europe/france/midi-pyrenees.mapgr";
 	    
 
 	    // Create a graph reader.
@@ -65,8 +65,12 @@ public class AStarTest {
 	    // TODO: Read the path.
 	    //Path path = pathReader.readPath(graph);
 
-	    int idOrigin=966454;
-	    int idDest=8836;
+	    //int idOrigin=966454;
+	    //int idDest=8836;
+	    
+	    //coordonnÃ©es carte midi-pyrÃ©nÃ©es
+	    int idOrigin=114565;
+	    int idDest=260540;
 	    
 	    List<ArcInspector> L = ArcInspectorFactory.getAllFilters();
 
@@ -82,7 +86,7 @@ public class AStarTest {
 		long finD=System.currentTimeMillis();
 		long diffD=finD-debD;
 		
-		System.out.println("temps d'éxecution de Dijkstra:"+diffD);
+		System.out.println("temps d'ï¿½xecution de Dijkstra:"+diffD);
 		
 		//Calcule du temps d'execution pour AStar
 		long debA=System.currentTimeMillis();
@@ -91,21 +95,21 @@ public class AStarTest {
 		long diffA=finA-debA;
 		
 		//Affichage des temps d'execution par curiosite puisque assertTrue() le vÃ©rifie
-		System.out.println("temps d'éxecution de Astar:"+diffA);
+		System.out.println("temps d'ï¿½xecution de Astar:"+diffA);
 		System.out.println("sol: "+SPD);
 		System.out.println("sol: "+SPASS);
 		
-		File ff=new File("C:/Users/Katillär/Documents/INSA/3ir/be_graphes/resultat.txt"); // définir l'arborescence
+		File ff=new File("C:/Users/Katillï¿½r/Documents/INSA/3ir/be_graphes/resultat.txt"); // dï¿½finir l'arborescence
 		ff.createNewFile();
 		FileWriter ffw=new FileWriter(ff,true);
 		
-		ffw.write("temps d'éxecution de Dijkstra:"+diffD+"\n");  // écrire une ligne dans le fichier resultat.txt
-		ffw.write("temps d'éxecution de Astar:"+diffA+"\n");  // écrire une ligne dans le fichier resultat.txt
-		ffw.write("sol: "+SPD+"\n");  // écrire une ligne dans le fichier resultat.txt
-		ffw.write("sol: "+SPASS+"\n");  // écrire une ligne dans le fichier resultat.txt
+		ffw.write("temps d'ï¿½xecution de Dijkstra:"+diffD+"\n");  // ï¿½crire une ligne dans le fichier resultat.txt
+		ffw.write("temps d'ï¿½xecution de Astar:"+diffA+"\n");  // ï¿½crire une ligne dans le fichier resultat.txt
+		ffw.write("sol: "+SPD+"\n");  // ï¿½crire une ligne dans le fichier resultat.txt
+		ffw.write("sol: "+SPASS+"\n");  // ï¿½crire une ligne dans le fichier resultat.txt
 
-		ffw.write("\n"); // forcer le passage à la ligne
-		ffw.close(); // fermer le fichier à la fin des traitements
+		ffw.write("\n"); // forcer le passage ï¿½ la ligne
+		ffw.close(); // fermer le fichier ï¿½ la fin des traitements
 		//renvoie exactement la meme valeur donc ok
 		//tests rÃ©alisÃ©s sur plusieurs map
 		
