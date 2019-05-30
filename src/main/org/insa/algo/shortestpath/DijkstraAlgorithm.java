@@ -61,7 +61,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	    final int nbNodes = graph.size();
 
 	    //Chemin: liste noeuds mini qui sortent du tas (il faut ensuite choisir le bon noeud pour remonter le chemin)
-	    //un noeud sortant du tas n'est pas forcément impliqué ds le chemin le plus court
+	    //un noeud sortant du tas n'est pas forcément impliqué dans le chemin le plus court
 	    //tablab: liste noeuds rencontre pendant l'algorithme
      
 	    Label tablab[]=new Label[nbNodes];
@@ -82,10 +82,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 		   	}*/	
 	    	
 	    	this.IncrementIter();
-
 	    	x = Tas_label.deleteMin();
-	    	//System.out.println("min: "+x.getNode().getId()+" cout: " +x.getCost()+" taille Tas: "+Tas_label.size());
-	    	//Chemin[x.getNode().getId()]=x;
 	    	
         	//informe les observateurs qu'un noeud a ete marque
 	    	notifyNodeMarked(tablab[x.getNode().getId()].getNode());
@@ -111,8 +108,8 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	    		if(!tablab[successeur.getDestination().getId()].isMarked()){ 
 	    			
 	        		if(tablab[successeur.getDestination().getId()].getCost()>tablab[x.getNode().getId()].getCost() + data.getCost(successeur)) {
-	            		//Cost(y)=cost(x)+W(x,y)
 	        			
+	            		//Cost(y)=cost(x)+W(x,y)
 	        			if(tablab[successeur.getDestination().getId()].getInsert()) {
 	        				Tas_label.remove(tablab[successeur.getDestination().getId()]);
             			}
@@ -121,10 +118,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 		            	//on supprime et on remet avec le getCost a jour
     					tablab[successeur.getDestination().getId()].setCost(tablab[x.getNode().getId()].getCost() + data.getCost(successeur));
     					tablab[successeur.getDestination().getId()].setFather(successeur);
-
-
 	    	    		Tas_label.insert(tablab[successeur.getDestination().getId()]);
-
             		}
 	        	}
 	    	}
@@ -132,7 +126,6 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	    
 	    ShortestPathSolution solution = null;
 	   
-	    
 	    //Destination has no predecessor, the solution is infeasible...
 	    if (tablab.length==0 || tablab[data.getDestination().getId()]==null) {
 	        solution = new ShortestPathSolution(data, Status.INFEASIBLE);
