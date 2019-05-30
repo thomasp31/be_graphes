@@ -1,0 +1,90 @@
+sol: Found a path from node #0 to node #1, 0.0080 kilometers in 0 seconds.
+Nombre d'iteration : 2
+
+sol: Found a path from node #0 to node #2, 0.0080 kilometers in 0 seconds.
+Nombre d'iteration : 3
+
+sol: Found a path from node #0 to node #3, 0.0110 kilometers in 0 seconds.
+Nombre d'iteration : 6
+
+sol: Found a path from node #0 to node #4, 0.0090 kilometers in 0 seconds.
+Nombre d'iteration : 4
+
+sol: Found a path from node #0 to node #5, 0.0100 kilometers in 0 seconds.
+Nombre d'iteration : 5
+
+sol: Found a path from node #1 to node #4, 0.0010 kilometers in 0 seconds.
+Nombre d'iteration : 2
+
+sol: Found a path from node #2 to node #4, 0.0030 kilometers in 0 seconds.
+Nombre d'iteration : 4
+
+sol: No path found from node #3 to node #4 in 0 seconds.
+Nombre d'iteration : 1
+
+sol: org.insa.algo.shortestpath.DijkstraAlgorithm@2d127a61
+Nombre d'iteration : 5
+
+sol: Found a path from node #2 to node #0, 0.0080 kilometers in 0 seconds.
+Nombre d'iteration : 6
+
+sol: Found a path from node #5 to node #4, 0.0030 kilometers in 0 seconds.
+Nombre d'iteration : 2
+
+sol: Found a path from node #1 to node #0, 0.0110 kilometers in 0 seconds.
+Nombre d'iteration : 6
+
+sol: Found a path from node #1 to node #5, 0.0040 kilometers in 0 seconds.
+Nombre d'iteration : 5
+
+sol: Found a path from node #1 to node #4, 0.0010 kilometers in 0 seconds.
+Nombre d'iteration : 0
+
+sol: No path found from node #3 to node #5 in 0 seconds.
+Nombre d'iteration : 1
+
+sol: org.insa.algo.shortestpath.DijkstraAlgorithm@2bbaf4f0
+Nombre d'iteration : 4
+
+sol: No path found from node #3 to node #0 in 0 seconds.
+Nombre d'iteration : 1
+
+sol: Found a path from node #5 to node #1, 0.0070 kilometers in 0 seconds.
+Nombre d'iteration : 5
+
+sol: Found a path from node #1 to node #2, 0.0030 kilometers in 0 seconds.
+Nombre d'iteration : 4
+
+sol: Found a path from node #2 to node #1, 0.0020 kilometers in 0 seconds.
+Nombre d'iteration : 2
+
+sol: No path found from node #3 to node #2 in 0 seconds.
+Nombre d'iteration : 1
+
+sol: Found a path from node #4 to node #2, 0.0020 kilometers in 0 seconds.
+Nombre d'iteration : 3
+
+sol: org.insa.algo.shortestpath.DijkstraAlgorithm@11c20519
+Nombre d'iteration : 4
+
+sol: Found a path from node #4 to node #0, 0.0100 kilometers in 0 seconds.
+Nombre d'iteration : 6
+
+sol: Found a path from node #1 to node #3, 0.0030 kilometers in 0 seconds.
+Nombre d'iteration : 3
+
+sol: Found a path from node #2 to node #3, 0.0050 kilometers in 0 seconds.
+Nombre d'iteration : 5
+
+sol: No path found from node #3 to node #1 in 0 seconds.
+Nombre d'iteration : 1
+
+sol: Found a path from node #4 to node #3, 0.0020 kilometers in 0 seconds.
+Nombre d'iteration : 2
+
+sol: org.insa.algo.shortestpath.DijkstraAlgorithm@70beb599
+Nombre d'iteration : 3
+
+sol: Found a path from node #5 to node #0, 0.0130 kilometers in 0 seconds.
+Nombre d'iteration : 6
+
