@@ -1,0 +1,89 @@
+Tests de performances sur la carte Bretagne
+
+temps d'éxecution de Dijkstra:655
+temps d'éxecution de Astar:595
+sol: Found a path from node #1504 to node #450393, 189.1934 kilometers in 0 seconds.
+sol: Found a path from node #1504 to node #450393, 189.1934 kilometers in 0 seconds.
+
+temps d'éxecution de Dijkstra:856
+temps d'éxecution de Astar:685
+sol: Found a path from node #1504 to node #450393, 189.1934 kilometers in 0 seconds.
+sol: Found a path from node #1504 to node #450393, 189.1934 kilometers in 0 seconds.
+
+temps d'éxecution de Dijkstra:799
+temps d'éxecution de Astar:807
+sol: Found a path from node #1 to node #50393, 175.6745 kilometers in 0 seconds.
+sol: Found a path from node #1 to node #50393, 175.6745 kilometers in 0 seconds.
+
+temps d'éxecution de Dijkstra:540
+temps d'éxecution de Astar:372
+sol: Found a path from node #185614 to node #85086, 128.3032 kilometers in 0 seconds.
+sol: Found a path from node #185614 to node #85086, 128.3032 kilometers in 0 seconds.
+
+temps d'éxecution de Dijkstra:747
+temps d'éxecution de Astar:629
+sol: Found a path from node #185614 to node #85086, 84.6632 minutes in 0 seconds.
+sol: Found a path from node #185614 to node #85086, 84.6632 minutes in 0 seconds.
+
+
+Tests de performances sur la carte Midi-Pyrénées
+
+temps d'éxecution de Dijkstra:1289
+temps d'éxecution de Astar:1279
+sol: Found a path from node #185614 to node #85086, 126.2454 minutes in 1 seconds.
+sol: Found a path from node #185614 to node #85086, 126.2454 minutes in 1 seconds.
+
+
+temps d'éxecution de Dijkstra:1380
+temps d'éxecution de Astar:1129
+sol: Found a path from node #18 to node #85086, 96.9054 minutes in 1 seconds.
+sol: Found a path from node #18 to node #85086, 96.9054 minutes in 1 seconds.
+
+temps d'éxecution de Dijkstra:171
+temps d'éxecution de Astar:44
+sol: Found a path from node #18 to node #886, 4.1474 kilometers in 0 seconds.
+sol: Found a path from node #18 to node #886, 4.1474 kilometers in 0 seconds.
+
+temps d'éxecution de Dijkstra:112
+temps d'éxecution de Astar:51
+sol: Found a path from node #12000 to node #15641, 13.8563 kilometers in 0 seconds.
+sol: Found a path from node #12000 to node #15641, 13.8563 kilometers in 0 seconds.
+
+temps d'éxecution de Dijkstra:159
+temps d'éxecution de Astar:79
+sol: Found a path from node #4219 to node #15, 28.4625 kilometers in 0 seconds.
+sol: Found a path from node #4219 to node #15, 28.4625 kilometers in 0 seconds.
+
+temps d'éxecution de Dijkstra:467
+temps d'éxecution de Astar:533
+sol: Found a path from node #78964 to node #312, 42.3639 minutes in 0 seconds.
+sol: Found a path from node #78964 to node #312, 42.3639 minutes in 0 seconds.
+
+Tests de performances sur la carte Belgique
+
+
+temps d'éxecution de Dijkstra:2039
+temps d'éxecution de Astar:2799
+sol: Found a path from node #532115 to node #2, 101.2242 minutes in 2 seconds.
+sol: Found a path from node #532115 to node #2, 101.2242 minutes in 2 seconds.
+
+temps d'éxecution de Dijkstra:714
+temps d'éxecution de Astar:204
+sol: Found a path from node #538885 to node #12354, 63.2233 kilometers in 0 seconds.
+sol: Found a path from node #538885 to node #12354, 63.2233 kilometers in 0 seconds.
+
+temps d'éxecution de Dijkstra:579
+temps d'éxecution de Astar:133
+sol: Found a path from node #15641 to node #124, 39.4768 kilometers in 0 seconds.
+sol: Found a path from node #15641 to node #124, 39.4768 kilometers in 0 seconds.
+
+temps d'éxecution de Dijkstra:1472
+temps d'éxecution de Astar:1473
+sol: Found a path from node #966454 to node #883667, 283.6968 kilometers in 1 seconds.
+sol: Found a path from node #966454 to node #883667, 283.6968 kilometers in 1 seconds.
+
+temps d'éxecution de Dijkstra:1430
+temps d'éxecution de Astar:1454
+sol: Found a path from node #966454 to node #8836, 111.3191 minutes in 1 seconds.
+sol: Found a path from node #966454 to node #8836, 111.3191 minutes in 1 seconds.
+
